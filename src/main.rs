@@ -1,5 +1,5 @@
-use crate::db::create_mongo_connection;
 use crate::controllers::push_event::register_push_event;
+use crate::db::create_mongo_connection;
 
 use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 
@@ -9,8 +9,6 @@ mod model;
 
 fn main() -> std::io::Result<()> {
     println!("Running server at port 5000");
-
-    let mongo = create_mongo_connection("localhost", 27017)
 
     HttpServer::new(|| {
         App::new().wrap(middleware::Logger::default()).service(
