@@ -20,8 +20,6 @@ pub fn create_mongo_connection() -> Database {
         .expect("MONGO_PORT not set")
         .parse()
         .expect("Invalid string conversion to u16");
-    let user: String = env::var("MONGO_USER").expect("MONGO_USER not set");
-    let password: String = env::var("MONGO_PASSWORD").expect("MONGO_PASSWORD not set");
     let database: String = env::var("MONGO_DATABASE").expect("MONGO_DATABASE not set");
 
     let client = match Client::connect(&host, port) {
@@ -29,10 +27,5 @@ pub fn create_mongo_connection() -> Database {
         Err(err) => panic!("Client unable to connect to mongo server, {:?}", err),
     };
 
-    let db = client.db(&database);
-
-    match db.auth(&user, &password) {
-        Ok(_) => db,
-        Err(err) => panic!("Authentication failed, {:?}", err),
-    }
+    client.db(&database)
 }
