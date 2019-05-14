@@ -15,6 +15,7 @@ mod actor;
 mod clients;
 mod controllers;
 mod db;
+mod errors;
 mod model;
 
 fn main() -> std::io::Result<()> {
@@ -41,7 +42,8 @@ fn main() -> std::io::Result<()> {
                     web::scope("/v1")
                         .service(web::resource("/").to(|| HttpResponse::Ok().json("Test Works")))
                         .service(
-                            web::resource("/event").route(web::post().to(register_push_event)),
+                            web::resource("/event")
+                                .route(web::post().to_async(register_push_event)),
                         ),
                 ),
             )

@@ -1,11 +1,22 @@
+use crate::errors::ServiceError;
 use crate::model::PushEvent;
 
-use actix::{Actor, Context, Handler};
+use actix::{Actor, Context, Handler, Message};
+use serde_derive::Deserialize;
 use telegram_bot_fork::{Api, CanSendMessage, ChatId};
 
 /// TbActor struct
 pub struct TbActor {
     pub client: Api,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PushEventMsg {
+    pub reference: String,
+}
+
+impl Message for PushEventMsg {
+    type Result = ();
 }
 
 impl TbActor {
@@ -21,12 +32,12 @@ impl Actor for TbActor {
     type Context = Context<Self>;
 }
 
-impl Handler<PushEvent> for TbActor {
+impl Handler<PushEventMsg> for TbActor {
     type Result = ();
 
     /// handle receives a PushEvent as a message and then
     /// sends it through telegram
-    fn handle(&mut self, msg: PushEvent, _: &mut Self::Context) {
+    fn handle(&mut self, msg: PushEventMsg, _: &mut Self::Context) {
         let chat = ChatId::new(742515568);
         self.client.spawn(chat.text(msg.reference));
     }

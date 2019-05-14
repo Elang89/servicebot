@@ -1,5 +1,3 @@
-use crate::actor::telegram::TbActor;
-
 use actix::{Addr, Message};
 use serde_derive::{Deserialize, Serialize};
 
