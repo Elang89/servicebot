@@ -1,4 +1,4 @@
-use crate::actor::telegram::TbActor;
+use crate::actor::{telegram_receiver::TbReceiverActor, telegram_sender::TbSenderActor};
 use crate::clients::create_telegram_client;
 use crate::controllers::push_event::register_push_event;
 use crate::db::create_mongo_connection;
@@ -26,17 +26,21 @@ fn main() -> std::io::Result<()> {
         .expect("ENV_PORT, not set")
         .parse()
         .expect("Invalid conversion from String to u16");
+
     let mongo_instance = create_mongo_connection();
     let telegram_client = create_telegram_client();
-    let tb_actor = TbActor::new(telegram_client);
-    let tb_addr: Addr<TbActor> = tb_actor.start();
+
+    let tb_sender = TbSenderActor(telegram_client.clone());
+    let tb_sender_addr: Addr<TbSenderActor> = tb_sender.start();
+    let tb_receiver = TbReceiverActor(telegram_client.clone());
+    let tb_receiver_addr: Addr<TbReceiverActor> = tb_receiver.start();
 
     println!("Running server on port {port}", port = env_port);
 
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default())
-            .data(tb_addr.clone())
+            .data(tb_sender_addr.clone())
             .service(
                 web::scope("/api").service(
                     web::scope("/v1")
