@@ -8,7 +8,6 @@ use actix::Addr;
 use actix_rt::System;
 use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 use dotenv::dotenv;
-use mongodb::db::ThreadedDatabase;
 use std::env;
 
 mod actor;
@@ -41,6 +40,7 @@ fn main() -> std::io::Result<()> {
         App::new()
             .wrap(middleware::Logger::default())
             .data(tb_sender_addr.clone())
+            .data(tb_receiver_addr.clone())
             .service(
                 web::scope("/api").service(
                     web::scope("/v1")

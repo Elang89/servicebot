@@ -1,4 +1,4 @@
-use mongodb::db::{Database, ThreadedDatabase};
+use mongodb::db::Database;
 use mongodb::{Client, ThreadedClient};
 use std::env;
 

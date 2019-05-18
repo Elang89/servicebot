@@ -2,7 +2,7 @@ use crate::actor::telegram_sender::{PushEventMsg, TbSenderActor};
 use crate::model::PushEvent;
 
 use actix::Addr;
-use actix_web::{web, Error, HttpResponse, ResponseError};
+use actix_web::{web, Error, HttpResponse};
 use futures::Future;
 
 pub fn register_push_event(

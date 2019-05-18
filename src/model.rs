@@ -1,4 +1,4 @@
-use actix::{Addr, Message};
+use actix::Message;
 use serde_derive::{Deserialize, Serialize};
 
 /// PushEvent represents a github PushEvent. The reference
