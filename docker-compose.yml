@@ -3,11 +3,15 @@ services:
   mongo:
     image: mongo:latest
     container_name: pushdb_container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - 27017:27017
     labels:
       name: "MongoDB Server"
     volumes: 
+      - ./scripts://docker-entrypoint-initdb.d/
       - mongo_db:/var/lib/mongodb/data
 volumes: 
   mongo_db:
