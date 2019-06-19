@@ -1,18 +1,20 @@
-version: "3.3"
+version: '3.7'
 services: 
-  mongo:
-    image: mongo:latest
-    container_name: pushdb_container
+  db:
+    container_name: pushevent_db
+    restart: always
+    image: postgres
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pushevent_db
     ports:
-      - 27017:27017
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data
     labels:
-      name: "MongoDB Server"
-    volumes: 
-      - ./scripts://docker-entrypoint-initdb.d/
-      - mongo_db:/var/lib/mongodb/data
+      name: "Postgres SQL Database"
+
 volumes: 
-  mongo_db:
+  postgres_db:
     
