@@ -1,7 +1,6 @@
 use crate::actor::{telegram_receiver::TbReceiverActor, telegram_sender::TbSenderActor};
 use crate::clients::create_telegram_client;
 use crate::controllers::push_event::register_push_event;
-use crate::db::create_mongo_connection;
 
 use actix::prelude::*;
 use actix::Addr;
@@ -13,7 +12,6 @@ use std::env;
 mod actor;
 mod clients;
 mod controllers;
-mod db;
 mod errors;
 mod model;
 
@@ -26,7 +24,6 @@ fn main() -> std::io::Result<()> {
         .parse()
         .expect("Invalid conversion from String to u16");
 
-    let mongo_instance = create_mongo_connection();
     let telegram_client = create_telegram_client();
 
     let tb_sender = TbSenderActor(telegram_client.clone());
